@@ -1,40 +1,19 @@
 import { Injectable, HttpException } from '@nestjs/common';
-import { ATHLETES } from './mocks/athletes.mock';
+import { Athlete } from "./interfaces/athlete.interface";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { CreateAthleteDTO } from "./dto/create-athlete.dto";
 
 @Injectable()
 export class AthletesService {
-    athletes = ATHLETES;
+    constructor(@InjectModel('Athlete') private readonly athleteModel: Model<Athlete>) {}
 
-    getAthletes(): Promise<any> {
-        return new Promise(resolve => {
-            resolve(this.athletes);
-        });
-    }
-    getAthlete(athleteID): Promise<any> {
-        let id = Number(athleteID);
-        return new Promise(resolve => {
-            const athlete = this.athletes.find(athlete => athlete.id === id);
-            if (!athlete) {
-                throw new HttpException('Athlete does not exist!', 404);
-            }
-            resolve(athlete);
-        });
-    }
-    addAthlete(athlete): Promise<any> {
-        return new Promise(resolve => {
-            this.athletes.push(athlete);
-            resolve(this.athletes);
-        });
-    }
-    deleteAthlete(athleteID): Promise<any> {
-        let id = Number(athleteID);
-        return new Promise(resolve => {
-            let index = this.athletes.findIndex(athlete => athlete.id === id);
-            if (index === -1) {
-                throw new HttpException('Athlete does not exist!', 404);
-            }
-            this.athletes.splice(index, 1);
-            resolve(this.athletes);
-        });
-    }
+    async create(createAthleteDto: CreateAthleteDTO): Promise<Athlete> {
+        const createdAthlete = new this.athleteModel(createAthleteDto);
+        return await createdAthlete.save();
+      }
+    
+      async findAll(): Promise<Athlete[]> {
+        return await this.athleteModel.find().exec();
+      }
 }
