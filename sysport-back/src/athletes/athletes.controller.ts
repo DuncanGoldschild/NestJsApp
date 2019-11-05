@@ -11,23 +11,10 @@ export class AthletesController {
         const athletes = await this.athletesService.findAll();
         return athletes;
     }
-/*
-    @Get(':athleteID')
-    async getAthlete(@Param('athleteID') athleteID) {
-        const athlete = await this.athletesService.getAthlete(athleteID);
-        console.log("test")
-        return athlete;
-    }
-*/
+
     @Post()
     async addAthlete(@Body() createAthleteDTO: CreateAthleteDTO) {
         const athlete = await this.athletesService.create(createAthleteDTO);
         return athlete;
     }
-/*
-    @Delete()
-    async deleteAthlete(@Query() query) {
-        const athletes = await this.athletesService.deleteAthlete(query.athleteID);
-        return athletes;
-    }*/
 }
