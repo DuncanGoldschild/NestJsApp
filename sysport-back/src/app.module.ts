@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AthletesModule } from './athletes/athletes.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ObserverService } from "./services/observer";
 
 @Module({
   imports: [
@@ -10,6 +11,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forRoot('mongodb://localhost/sysport')
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ObserverService],
 })
 export class AppModule { }
